@@ -472,7 +472,17 @@ ffi_call (ffi_cif *cif, void (*fn)(void), void *rvalue, void **avalue)
 		case X86_64_INTEGER_CLASS:
 		case X86_64_INTEGERSI_CLASS:
 		  reg_args->gpr[gprcount] = 0;
-		  memcpy (&reg_args->gpr[gprcount], a, size < 8 ? size : 8);
+		  switch (arg_types[i]->type)
+		    {
+		    case FFI_TYPE_SINT8:
+		      reg_args->gpr[gprcount] = (SINT32) *(SINT8 *) a;
+		      break;
+		    case FFI_TYPE_SINT16:
+		      reg_args->gpr[gprcount] = (SINT32) *(SINT16 *) a;
+		      break;
+		    default:
+		      memcpy (&reg_args->gpr[gprcount], a, size < 8 ? size : 8);
+		    }
 		  gprcount++;
 		  break;
 		case X86_64_SSE_CLASS:
