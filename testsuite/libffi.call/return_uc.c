@@ -32,7 +32,7 @@ int main (void)
        uc < (unsigned char) '\xff'; uc++)
     {
       ffi_call(&cif, FFI_FN(return_uc), &rint, values);
-      CHECK(rint == (signed int) uc);
+      CHECK(rint == (ffi_arg) uc);
     }
   exit(0);
 }
